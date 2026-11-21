@@ -1,0 +1,11 @@
+requests>=2.31.0
+
+# 功能测试
+pytest>=8.0
+allure-pytest>=2.13
+
+# 性能压测
+locust>=2.30
+gevent>=24.0
+gevent-websocket>=0.10
+websocket-client>=1.8

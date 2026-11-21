@@ -1,0 +1,15 @@
+{
+  "python.defaultInterpreterPath": "C:/Users/Administrator/.workbuddy/binaries/python/versions/3.13.12/python.exe",
+  "python.testing.unittestEnabled": true,
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./testcases",
+    "-p",
+    "test_*.py",
+    "-t",
+    "."
+  ],
+  "python.testing.pytestEnabled": false,
+  "files.encoding": "utf8"
+}

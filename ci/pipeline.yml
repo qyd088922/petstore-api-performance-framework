@@ -1,0 +1,43 @@
+# CI/CD：无头模式运行功能测试与性能压测，产出 HTML/Allure 报告
+# 以 GitLab CI 语法为例，GitHub Actions / Jenkins 可直接迁移 script 部分
+
+stages:
+  - functional
+  - performance
+
+functional-test:
+  stage: functional
+  image: python:3.13-slim
+  script:
+    - pip install --no-cache-dir -r requirements.txt
+    - python -m pytest --alluredir=reports/allure-results
+    # Allure CLI 需 Java；有 Java 的 runner 上执行：
+    # - allure generate reports/allure-results -o reports/allure-report --clean
+    - python -m report.allure_report   # 无 Java 时的离线 HTML 兜底
+  artifacts:
+    paths:
+      - reports/allure-results/
+      - reports/pytest_report.html
+
+performance-test:
+  stage: performance
+  image: python:3.13-slim
+  services: []
+  script:
+    - pip install --no-cache-dir -r requirements.txt
+    # 启动本地 WS echo 靶标（后台）
+    - python -m perf.ws_echo_server &
+    - sleep 2
+    # Locust 无头压测：阶梯模型，参数由环境变量注入
+    - |
+      PERF_SHAPE=step PERF_DURATION=60 PERF_MAX_USERS=100 \
+      python -m locust -f perf/locustfile.py --headless \
+        -u 100 -r 10 -t 60s \
+        --html reports/locust_report.html \
+        --csv reports/locust_stats
+    - python -m report.perf_report
+  artifacts:
+    paths:
+      - reports/locust_report.html
+      - reports/locust_stats_*.csv
+      - reports/perf_report.html
