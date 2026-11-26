@@ -13,5 +13,8 @@ API_KEY = "special-key"
 # 测试报告 / 日志输出目录（相对项目根目录）
 REPORT_DIR = "reports"
 
+# 每类报告保留的历史归档份数（超出后自动删除最旧的）
+HISTORY_KEEP = 10
+
 # 是否在日志中打印完整响应体
 VERBOSE_LOG = True
