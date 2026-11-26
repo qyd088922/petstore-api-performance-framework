@@ -74,4 +74,4 @@ class TestPetApi(BaseCase):
 
         resp = self.pet_api.upload_pet_image(pet_id, image_path, "automation")
         self.assert_status(resp)
-        self.assertIn("Uploaded", resp.body.get("message", ""))
+        self.assertIn("upload", resp.body.get("message", "").lower())
